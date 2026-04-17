@@ -1,0 +1,84 @@
+// C++ code
+//
+
+const int leds[] = {2, 3, 4, 5};      
+const int buttons[] = {8, 9, 10, 11}; 
+const int buzzer = 6;                 
+const int count = 4;                  
+
+int sequence[100]; 
+int score = 0;
+int seqLength = 1;
+
+void setup() {
+  for (int i = 0; i < count; i++) {
+    pinMode(leds[i], OUTPUT);
+    pinMode(buttons[i], INPUT_PULLUP); 
+  }
+  pinMode(buzzer, OUTPUT);
+  
+  randomSeed(analogRead(0));
+  Serial.begin(9600);
+  Serial.println("Game started...");
+}
+
+void loop() {
+  
+  if (score < 5) {
+    seqLength = score + 1; 
+  } else {
+    seqLength = score / 2 + 2; 
+  }
+
+  
+  Serial.println("Look at LEDs");
+  for (int i = 0; i < seqLength; i++) {
+    sequence[i] = random(0, count);
+    digitalWrite(leds[sequence[i]], HIGH);
+    tone(buzzer, 400 + (sequence[i] * 100), 200);
+    delay(500);
+    digitalWrite(leds[sequence[i]], LOW);
+    delay(200);
+  }
+
+  
+  if (checkUserSequence()) {
+    score++;
+    Serial.print("Correct! Score: ");
+    Serial.println(score);
+    delay(1000);
+  } else {
+    gameOver();
+  }
+}
+
+
+bool checkUserSequence() {
+  for (int i = 0; i < seqLength; i++) {
+    int expected = sequence[i];
+    int pressed = -1;
+
+    while (pressed == -1) {
+      for (int b = 0; b < count; b++) {
+        if (digitalRead(buttons[b]) == LOW) { 
+          pressed = b;
+          digitalWrite(leds[b], HIGH);
+          tone(buzzer, 400 + (b * 100), 100);
+          while(digitalRead(buttons[b]) == LOW); 
+          delay(50);
+          digitalWrite(leds[b], LOW);
+        }
+      }
+    }
+
+    if (pressed != expected) return false;
+  }
+  return true;
+}
+
+void gameOver() {
+  Serial.println("Game Over!");
+  tone(buzzer, 150, 500);
+  score = 0;
+  delay(2000);
+}
