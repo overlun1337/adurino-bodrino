@@ -1,0 +1,14 @@
+void setup() {
+  pinMode(9, OUTPUT); 
+  pinMode(10, OUTPUT); 
+  pinMode(A0, INPUT);  
+}
+
+void loop() {
+  int potValue = analogRead(A0);           
+  int brightness1 = map(potValue, 0, 1023, 0, 255); 
+  int brightness2 = 255 - brightness1;    
+
+  analogWrite(9, brightness1);
+  analogWrite(10, brightness2);
+}
