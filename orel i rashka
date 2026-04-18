@@ -1,0 +1,17 @@
+import random
+
+def play():
+    options = ["орел", "решка"]
+    
+    while True:
+        user_input = input("Натисніть Enter, щоб підкинути монетку (або введіть 'вихід'): ").lower()
+        
+        if user_input == "вихід":
+            break
+            
+        result = random.choice(options)
+        print(f"Випало: {result}")
+        print("-" * 20)
+
+if __name__ == "__main__":
+    play()
