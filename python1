@@ -1,0 +1,30 @@
+import random
+
+def play():
+    options = ["камінь", "ножиці", "папір"]
+    
+    while True:
+        user_choice = input("Виберіть (камінь, ножиці, папір) або 'вихід': ").lower()
+        
+        if user_choice == "вихід":
+            break
+            
+        if user_choice not in options:
+            print("Неправильний вибір!")
+            continue
+            
+        computer_choice = random.choice(options)
+        print(f"Комп'ютер обрав: {computer_choice}")
+        
+        if user_choice == computer_choice:
+            print("Нічия!")
+        elif (user_choice == "камінь" and computer_choice == "ножиці") or \
+             (user_choice == "ножиці" and computer_choice == "папір") or \
+             (user_choice == "папір" and computer_choice == "камінь"):
+            print("Ви перемогли!")
+        else:
+            print("Ви програли!")
+        print("-" * 20)
+
+if __name__ == "__main__":
+    play()
